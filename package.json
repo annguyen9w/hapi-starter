@@ -4,7 +4,9 @@
   "description": "Starter for Typescript/HAPI/Inversify/TypeORM",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run nodemon:build",
+    "db:start": "docker-compose -f database/docker-compose.yml up -d",
+    "db:stop": "docker-compose -f database/docker-compose.yml down",
+    "dev": "npm run db:start && npm run nodemon:build",
     "build": "tsc && npm run copy-files",
     "copy-files": "copyfiles -u 1 ./src/**/*.yaml ./dist/",
     "start": "npm run build && node dist/index.js",
