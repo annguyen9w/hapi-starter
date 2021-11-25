@@ -7,6 +7,7 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { ICarsController } from './interfaces/cars.interface';
 import { CarService } from '../service/car';
 import { CarDTO } from '../dto/car';
 import { Car } from '../entity/Car';
@@ -14,7 +15,7 @@ import { CarMapper } from '../helpers/mapper/car';
 import { RaceResultService } from '../service/race-result';
 
 @injectable()
-class CarController extends HapiController {
+class CarController extends HapiController implements ICarsController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
@@ -177,7 +178,7 @@ class CarController extends HapiController {
         auth: false
       }
     })
-    public async getRaceResultByRaceId(request: Request, toolkit: ResponseToolkit) {
+    public async getRaceResultsByCarId(request: Request, toolkit: ResponseToolkit) {
       const item = await this.carService.findById(request.params.carId);
       if (!item) {
         throw Boom.notFound();

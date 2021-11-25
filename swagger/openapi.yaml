@@ -293,7 +293,7 @@ paths:
       tags:
         - Driver
       summary: All race results for that driver
-      operationId: getRaceResultByDriverId
+      operationId: getRaceResultsByDriverId
       parameters:
         - name: driverId
           in: path
@@ -520,7 +520,7 @@ paths:
       tags:
         - Car
       summary: All race results for that car
-      operationId: getRaceResultByCarId
+      operationId: getRaceResultsByCarId
       parameters:
         - name: carId
           in: path
@@ -639,7 +639,7 @@ paths:
       tags:
         - Race
       summary: All race results for that race
-      operationId: getRaceResultByRaceId
+      operationId: getRaceResultsByRaceId
       parameters:
         - name: raceId
           in: path
@@ -664,7 +664,7 @@ paths:
       tags:
         - Race
       summary: Add race results for that race
-      operationId: AddRaceResult
+      operationId: addRaceResults
       parameters:
         - name: raceId
           in: path

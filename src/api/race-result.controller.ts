@@ -7,13 +7,14 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { IRaceResultsController } from './interfaces/race-results.interface';
 import { RaceResultService } from '../service/race-result';
 import { RaceResultDTO } from '../dto/race-result';
 import { RaceResult } from '../entity/RaceResult';
 import { RaceResultMapper } from '../helpers/mapper/race-result';
 
 @injectable()
-class RaceResultController extends HapiController {
+class RaceResultController extends HapiController implements IRaceResultsController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,

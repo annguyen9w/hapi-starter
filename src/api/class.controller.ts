@@ -7,13 +7,14 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { IClassesController } from './interfaces/classes.interface';
 import { ClassService } from '../service/class';
 import { ClassDTO } from '../dto/class';
 import { Class } from '../entity/Class';
 import { ClassMapper } from '../helpers/mapper/class';
 
 @injectable()
-class ClassController extends HapiController {
+class ClassController extends HapiController implements IClassesController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,

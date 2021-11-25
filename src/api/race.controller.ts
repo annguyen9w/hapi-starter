@@ -7,6 +7,7 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { IRacesController } from './interfaces/races.interface';
 import { RaceService } from '../service/race';
 import { RaceDTO } from '../dto/race';
 import { Race } from '../entity/Race';
@@ -18,7 +19,7 @@ import { RaceResult } from '../entity/RaceResult';
 import { RaceResultMapper } from '../helpers/mapper/race-result';
 
 @injectable()
-class RaceController extends HapiController {
+class RaceController extends HapiController implements IRacesController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
@@ -183,7 +184,7 @@ class RaceController extends HapiController {
       auth: false
     }
   })
-  public async getRaceResultByRaceId(request: Request, toolkit: ResponseToolkit) {
+  public async getRaceResultsByRaceId(request: Request, toolkit: ResponseToolkit) {
     const item = await this.raceService.findById(request.params.raceId);
     if (!item) {
       throw Boom.notFound();
@@ -218,7 +219,7 @@ class RaceController extends HapiController {
       auth: false
     }
   })
-  public async addRaceResult(request: Request, toolkit: ResponseToolkit) {
+  public async addRaceResults(request: Request, toolkit: ResponseToolkit) {
     const item = await this.raceService.findById(request.params.raceId);
     if (!item) {
       throw Boom.notFound();

@@ -7,6 +7,7 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { IDriversController } from './interfaces/drivers.interface';
 import { DriverService } from '../service/driver';
 import { DriverDTO } from '../dto/driver';
 import { Driver } from '../entity/Driver';
@@ -14,7 +15,7 @@ import { DriverMapper } from '../helpers/mapper/driver';
 import { RaceResultService } from '../service/race-result';
 
 @injectable()
-class DriverController extends HapiController {
+class DriverController extends HapiController implements IDriversController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
@@ -174,7 +175,7 @@ class DriverController extends HapiController {
         auth: false
       }
     })
-    public async getRaceResultByRaceId(request: Request, toolkit: ResponseToolkit) {
+    public async getRaceResultsByDriverId(request: Request, toolkit: ResponseToolkit) {
       const item = await this.driverService.findById(request.params.driverId);
       if (!item) {
         throw Boom.notFound();

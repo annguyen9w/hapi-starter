@@ -7,6 +7,7 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { ITeamsController } from './interfaces/teams.interface';
 import { TeamService } from '../service/team';
 import { TeamDTO } from '../dto/team';
 import { Team } from '../entity/Team';
@@ -14,7 +15,7 @@ import { TeamMapper } from '../helpers/mapper/team';
 import { DriverService } from '../service/driver';
 
 @injectable()
-class TeamController extends HapiController {
+class TeamController extends HapiController implements ITeamsController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,

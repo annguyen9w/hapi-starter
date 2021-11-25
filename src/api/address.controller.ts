@@ -7,13 +7,14 @@ import { TYPES } from '../ioc/types';
 import { HapiRoute } from '../decorators/decorators';
 import { HapiController } from './hapi-controller';
 
+import { IAddressesController } from './interfaces/addresses.interface';
 import { AddressService } from '../service/address';
 import { AddressDTO } from '../dto/address';
 import { Address } from '../entity/Address';
 import { AddressMapper } from '../helpers/mapper/address';
 
 @injectable()
-class AddressController extends HapiController {
+class AddressController extends HapiController implements IAddressesController {
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
     @inject(TYPES.AddressMapper) private addressMapper: AddressMapper,
