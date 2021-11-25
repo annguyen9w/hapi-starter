@@ -4,7 +4,7 @@
 - 11/16/2021
     + draw the ERD: 1h
     + research TypeORM to declare appropriate columns and foreign keys: 4h
-    + implement `Entity`: 2h
+    + implement TypeORM Entity: 2h
 - 11/17/2021
     + get familiar with OpenAPI and Swagger editor: 1h
     + design API according to the requirements (Class, Address, Driver and Team): 5h
@@ -13,13 +13,17 @@
     + re-read document how do I work with services and controller: 1h
     + implement module class: 3h
 - 11/19/2021
-    + implement: 7h
+    + try swagger codepen generate: 2h
+    + implement: 5h
 - 11/22/2021
-    + Re-draw the ERD & Fix database schema: 2h
-    + Fix api design: 3h
+    + Re-draw the ERD & database schema: 2h
+    + Update api design (for new database schema): 2h
+    + update controller & service (for new api design): 2h
 - 11/23/2021
     + update Craig feedback (database schema, api design): 3h
     + update Craig feedback (implement): 3h
 - 11/24/2021
     + update Craig feedback (implement): 4h
     + try jest for unit test: 1h
+- 11/25/2021
+    + standardize response body and status code: 7h
