@@ -45,7 +45,12 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async getRaces(request: Request, toolkit: ResponseToolkit) {
-    return toolkit.response(await this.raceService.findAll());
+    const data = await this.raceService.findAll();
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -76,7 +81,10 @@ class RaceController extends HapiController implements IRacesController {
     const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
     payload.id = request.params.raceId;
     await this.raceService.save(payload);
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -114,7 +122,11 @@ class RaceController extends HapiController implements IRacesController {
         await this.raceResultService.save(raceResultMapper);
       }
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      data: race?.id,
+      message: 'Success'
+    });
   }
 
   /**
@@ -135,11 +147,15 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async getRaceById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.raceService.findById(request.params.raceId);
-    if (!item) {
+    const data = await this.raceService.findById(request.params.raceId);
+    if (!data) {
       throw Boom.notFound();
     }
-    return toolkit.response(item);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -164,7 +180,10 @@ class RaceController extends HapiController implements IRacesController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -189,7 +208,12 @@ class RaceController extends HapiController implements IRacesController {
     if (!item) {
       throw Boom.notFound();
     }
-    return toolkit.response(await this.raceResultService.findByQuery({ race: request.params.raceId }));
+    const data = await this.raceResultService.findByQuery({ race: request.params.raceId });
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -232,7 +256,10 @@ class RaceController extends HapiController implements IRacesController {
         await this.raceResultService.save(raceResultMapper);
       }
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
 }

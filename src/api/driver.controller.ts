@@ -40,7 +40,12 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async getDrivers(request: Request, toolkit: ResponseToolkit) {
-    return toolkit.response(await this.driverService.findAll());
+    const data = await this.driverService.findAll();
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -75,7 +80,10 @@ class DriverController extends HapiController implements IDriversController {
     const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
     payload.id = request.params.driverId;
     await this.driverService.save(payload);
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -103,8 +111,9 @@ class DriverController extends HapiController implements IDriversController {
     const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
     const driver: Driver|undefined = await this.driverService.save(payload);
     return toolkit.response({
-      id: driver?.id,
-      status: 'success'
+      statusCode: 200,
+      data: driver?.id,
+      message: 'Success'
     });
   }
 
@@ -126,11 +135,15 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async getDriverById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.driverService.findById(request.params.driverId);
-    if (!item) {
+    const data = await this.driverService.findById(request.params.driverId);
+    if (!data) {
       throw Boom.notFound();
     }
-    return toolkit.response(item);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -155,33 +168,41 @@ class DriverController extends HapiController implements IDriversController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
    * All race results for that driver
    */
-     @HapiRoute({
-      method: 'GET',
-      path: 'drivers/{driverId}/results',
-      options: {
-        validate: {
-          params: {
-            driverId: Joi.string().length(36).required()
-          }
-        },
-        description: 'All race results for that driver',
-        tags: ['Driver'],
-        auth: false
-      }
-    })
-    public async getRaceResultsByDriverId(request: Request, toolkit: ResponseToolkit) {
-      const item = await this.driverService.findById(request.params.driverId);
-      if (!item) {
-        throw Boom.notFound();
-      }
-      return toolkit.response(await this.raceResultService.findByQuery({ driver: request.params.driverId }));
+  @HapiRoute({
+    method: 'GET',
+    path: 'drivers/{driverId}/results',
+    options: {
+      validate: {
+        params: {
+          driverId: Joi.string().length(36).required()
+        }
+      },
+      description: 'All race results for that driver',
+      tags: ['Driver'],
+      auth: false
     }
+  })
+  public async getRaceResultsByDriverId(request: Request, toolkit: ResponseToolkit) {
+    const item = await this.driverService.findById(request.params.driverId);
+    if (!item) {
+      throw Boom.notFound();
+    }
+    const data = await this.raceResultService.findByQuery({ driver: request.params.driverId });
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
+  }
 }
 
 export { DriverController }

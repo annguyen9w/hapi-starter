@@ -45,7 +45,12 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async getCars(request: Request, toolkit: ResponseToolkit) {
-    return toolkit.response(await this.carService.findAllByQuery(request.query));
+    const data = await this.carService.findAllByQuery(request.query);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -79,7 +84,10 @@ class CarController extends HapiController implements ICarsController {
     const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
     payload.id = request.params.carId;
     await this.carService.save(payload);
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -106,8 +114,9 @@ class CarController extends HapiController implements ICarsController {
     const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
     const car: Car|undefined = await this.carService.save(payload);
     return toolkit.response({
-      id: car?.id,
-      status: 'success'
+      statusCode: 200,
+      data: car?.id,
+      message: 'Success'
     });
   }
 
@@ -129,11 +138,15 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async getCarById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.carService.findById(request.params.carId);
-    if (!item) {
+    const data = await this.carService.findById(request.params.carId);
+    if (!data) {
       throw Boom.notFound();
     }
-    return toolkit.response(item);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -158,33 +171,41 @@ class CarController extends HapiController implements ICarsController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
    * All race results for that car
    */
-     @HapiRoute({
-      method: 'GET',
-      path: 'cars/{carId}/results',
-      options: {
-        validate: {
-          params: {
-            carId: Joi.string().length(36).required()
-          }
-        },
-        description: 'All race results for that car',
-        tags: ['Car'],
-        auth: false
-      }
-    })
-    public async getRaceResultsByCarId(request: Request, toolkit: ResponseToolkit) {
-      const item = await this.carService.findById(request.params.carId);
-      if (!item) {
-        throw Boom.notFound();
-      }
-      return toolkit.response(await this.raceResultService.findByQuery({ car: request.params.carId }));
+  @HapiRoute({
+    method: 'GET',
+    path: 'cars/{carId}/results',
+    options: {
+      validate: {
+        params: {
+          carId: Joi.string().length(36).required()
+        }
+      },
+      description: 'All race results for that car',
+      tags: ['Car'],
+      auth: false
     }
+  })
+  public async getRaceResultsByCarId(request: Request, toolkit: ResponseToolkit) {
+    const item = await this.carService.findById(request.params.carId);
+    if (!item) {
+      throw Boom.notFound();
+    }
+    const data = await this.raceResultService.findByQuery({ car: request.params.carId })
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
+  }
 }
 
 export { CarController }

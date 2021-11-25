@@ -38,7 +38,12 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async getClasses(request: Request, toolkit: ResponseToolkit) {
-    return toolkit.response(await this.classService.findAll());
+    const data = await this.classService.findAll();
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -69,7 +74,10 @@ class ClassController extends HapiController implements IClassesController {
     const payload: Class = this.classMapper.map(ClassDTO, Class, request.payload);
     payload.id = request.params.classId;
     await this.classService.save(payload);
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -91,10 +99,11 @@ class ClassController extends HapiController implements IClassesController {
   })
   public async addClass(request: Request, toolkit: ResponseToolkit) {
     const payload: Class = this.classMapper.map(ClassDTO, Class, request.payload);
-    const classItem: Class|undefined = await this.classService.save(payload);
+    const item: Class|undefined = await this.classService.save(payload);
     return toolkit.response({
-      id: classItem?.id,
-      status: 'success'
+      statusCode: 200,
+      data: item?.id,
+      message: 'Success'
     });
   }
 
@@ -116,11 +125,15 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async getClassById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.classService.findById(request.params.classId);
-    if (!item) {
+    const data = await this.classService.findById(request.params.classId);
+    if (!data) {
       throw Boom.notFound();
     }
-    return toolkit.response(item);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -145,7 +158,10 @@ class ClassController extends HapiController implements IClassesController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
 }

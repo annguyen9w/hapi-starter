@@ -37,7 +37,12 @@ class AddressController extends HapiController implements IAddressesController {
     }
   })
   public async getAddresses(request: Request, toolkit: ResponseToolkit) {
-    return toolkit.response(await this.addressService.findAll());
+    const data = await this.addressService.findAll()
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -73,7 +78,10 @@ class AddressController extends HapiController implements IAddressesController {
     const payload: Address = this.addressMapper.map(AddressDTO, Address, request.payload);
     payload.id = request.params.addressId
     await this.addressService.save(payload);
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -103,8 +111,9 @@ class AddressController extends HapiController implements IAddressesController {
     await this.addressService.save(payload);
     const address: Address|undefined = await this.addressService.save(payload);
     return toolkit.response({
-      id: address?.id,
-      status: 'success'
+      statusCode: 200,
+      data: address?.id,
+      message: 'Success'
     });
   }
 
@@ -126,11 +135,15 @@ class AddressController extends HapiController implements IAddressesController {
     }
   })
   public async getAddressById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.addressService.findById(request.params.addressId);
-    if (!item) {
+    const data = await this.addressService.findById(request.params.addressId);
+    if (!data) {
       throw Boom.notFound();
     }
-    return toolkit.response(item);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -155,7 +168,10 @@ class AddressController extends HapiController implements IAddressesController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
 }

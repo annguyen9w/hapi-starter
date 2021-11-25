@@ -40,7 +40,12 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async getTeams(request: Request, toolkit: ResponseToolkit) {
-    return toolkit.response(await this.teamService.findAll());
+    const data = await this.teamService.findAll();
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -78,7 +83,10 @@ class TeamController extends HapiController implements ITeamsController {
       payload.drivers = drivers
     }
     await this.teamService.save(payload);
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
   /**
@@ -109,8 +117,9 @@ class TeamController extends HapiController implements ITeamsController {
     }
     const team :Team|undefined = await this.teamService.save(payload);
     return toolkit.response({
-      id: team?.id,
-      status: 'success'
+      statusCode: 200,
+      data: team?.id,
+      message: 'Success'
     });
   }
 
@@ -132,11 +141,15 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async getTeamById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.teamService.findById(request.params.teamId);
-    if (!item) {
+    const data = await this.teamService.findById(request.params.teamId);
+    if (!data) {
       throw Boom.notFound();
     }
-    return toolkit.response(item);
+    return toolkit.response({
+      statusCode: 200,
+      data,
+      message: 'Success'
+    });
   }
 
   /**
@@ -161,7 +174,10 @@ class TeamController extends HapiController implements ITeamsController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response('success');
+    return toolkit.response({
+      statusCode: 200,
+      message: 'Success'
+    });
   }
 
 }

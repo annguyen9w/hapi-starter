@@ -4,6 +4,7 @@ import { Controllers } from "./api/controllers";
 import { Logger } from "winston";
 import { plugins } from "./helpers/plugins";
 import { TYPES } from "./ioc/types";
+import * as Boom from '@hapi/boom';
 
 /**
  * This class encapsulates the HAPI server instance, and is responsible for startup and configuration
