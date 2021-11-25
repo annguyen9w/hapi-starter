@@ -17,22 +17,15 @@ paths:
       operationId: getClasses
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Class'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/Class'
         # '400':
-        #   $ref: '#/components/responses/badrequest'
+        #   $ref: '#/components/responses/400BadRequest'
     post:
       tags:
         - Class
@@ -41,10 +34,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Class'
       responses:
-        '200':
-          $ref: '#/components/responses/successwithid'
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
   /classes/{classId}:
     get:
       tags:
@@ -60,22 +53,15 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/Class'
-                    required:
-                      - data
+                $ref: '#/components/schemas/Class'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     put:
       tags:
         - Class
@@ -91,12 +77,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Class'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Class
@@ -110,12 +96,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /addresses:
     get:
       tags:
@@ -124,22 +110,15 @@ paths:
       operationId: getAddresses
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Address'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
         # '400':
-        #   $ref: '#/components/responses/badrequest'
+        #   $ref: '#/components/responses/400BadRequest'
     post:
       tags:
         - Address
@@ -148,10 +127,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Address'
       responses:
-        '200':
-          $ref: '#/components/responses/successwithid'
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
   /addresses/{addressId}:
     get:
       tags:
@@ -167,22 +146,15 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/Address'
-                    required:
-                      - data
+                $ref: '#/components/schemas/Address'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     put:
       tags:
         - Address
@@ -198,12 +170,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Address'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Address
@@ -217,12 +189,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /drivers:
     get:
       tags:
@@ -231,22 +203,15 @@ paths:
       operationId: getDrivers
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/DriverResponse'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/DriverResponse'
         # '400':
-        #   $ref: '#/components/responses/badrequest'
+        #   $ref: '#/components/responses/400BadRequest'
     post:
       tags:
         - Driver
@@ -255,10 +220,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Driver'
       responses:
-        '200':
-          $ref: '#/components/responses/successwithid'
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
   /drivers/{driverId}:
     get:
       tags:
@@ -274,22 +239,15 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/DriverResponse'
-                    required:
-                      - data
+                $ref: '#/components/schemas/DriverResponse'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     put:
       tags:
         - Driver
@@ -305,12 +263,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Driver'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Driver
@@ -324,12 +282,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /drivers/{driverId}/results:
     get:
       tags:
@@ -345,24 +303,17 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/RaceResult'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/RaceResult'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /teams:
     get:
       tags:
@@ -371,22 +322,15 @@ paths:
       operationId: getTeams
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/TeamResponse'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamResponse'
         # '400':
-        #   $ref: '#/components/responses/badrequest'
+        #   $ref: '#/components/responses/400BadRequest'
     post:
       tags:
         - Team
@@ -395,10 +339,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Team'
       responses:
-        '200':
-          $ref: '#/components/responses/successwithid'
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
   /teams/{teamId}:
     get:
       tags:
@@ -414,22 +358,15 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/TeamResponse'
-                    required:
-                      - data
+                $ref: '#/components/schemas/TeamResponse'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     put:
       tags:
         - Team
@@ -445,12 +382,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Team'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Team
@@ -464,12 +401,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /cars:
     get:
       tags:
@@ -493,22 +430,15 @@ paths:
             example: 488 GTE-LM
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/CarResponse'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarResponse'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
     post:
       tags:
         - Car
@@ -517,10 +447,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Car'
       responses:
-        '200':
-          $ref: '#/components/responses/successwithid'
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
   /cars/{carId}:
     get:
       tags:
@@ -536,22 +466,15 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/CarResponse'
-                    required:
-                      - data
+                $ref: '#/components/schemas/CarResponse'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     put:
       tags:
         - Car
@@ -567,12 +490,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/Car'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Car
@@ -586,12 +509,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /cars/{carId}/results:
     get:
       tags:
@@ -607,24 +530,17 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/RaceResult'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/RaceResult'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /races:
     get:
       tags:
@@ -633,22 +549,15 @@ paths:
       operationId: getRaces
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/Race'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/Race'
         # '400':
-        #   $ref: '#/components/responses/badrequest'
+        #   $ref: '#/components/responses/400BadRequest'
     post:
       tags:
         - Race
@@ -657,10 +566,10 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/CreateRace'
       responses:
-        '200':
-          $ref: '#/components/responses/successwithid'
+        '201':
+          $ref: '#/components/responses/201Created'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
   /races/{raceId}:
     get:
       tags:
@@ -676,22 +585,15 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        $ref: '#/components/schemas/Race'
-                    required:
-                      - data
+                $ref: '#/components/schemas/Race'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     put:
       tags:
         - Race
@@ -707,12 +609,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/UpdateRace'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Race
@@ -726,12 +628,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /races/{raceId}/results:
     get:
       tags:
@@ -747,24 +649,17 @@ paths:
             $ref: '#/components/schemas/UUID'
       responses:
         '200':
-          description: Successful operation
+          description: OK. Successful operation
           content:
             application/json:
               schema:
-                allOf:
-                  - $ref: '#/components/schemas/200Response'
-                  - type: object
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/RaceResult'
-                    required:
-                      - data
+                type: array
+                items:
+                  $ref: '#/components/schemas/RaceResult'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     post:
       tags:
         - Race
@@ -780,12 +675,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/AddRaceResult'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '201':
+          description: Created. Successful operation
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
   /race-results/{raceResultId}:
     put:
       tags:
@@ -802,12 +697,12 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/RaceResult'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
     delete:
       tags:
         - Race Result
@@ -821,30 +716,18 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
-          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/204NoContent'
         '400':
-          $ref: '#/components/responses/badrequest'
+          $ref: '#/components/responses/400BadRequest'
         '404':
-          $ref: '#/components/responses/notfound'
+          $ref: '#/components/responses/404NotFound'
 components:
   schemas:
     UUID:
       type: string
       format: uuid
       example: 40e6215d-b5c6-4896-987c-f30f3678f608
-    200Response:
-      type: object
-      properties:
-        statusCode: 
-          type: integer
-          default: 200
-        message:
-          type: string
-          default: Success
-      required:
-        - statusCode
-        - message
     ClassRequestBody:
       required:
         - name
@@ -1197,27 +1080,16 @@ components:
             $ref: '#/components/schemas/RaceResultRequestBody'
       required: true
   responses:
-    success:
-      description: Successful operation
+    201Created:
+      description: Created. Successful operation
       content:
-        application/json:
+        text/plain; charset=utf-8:
           schema:
-            $ref: '#/components/schemas/200Response'
-    successwithid:
-      description: Successful operation
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/200Response'
-              - type: object
-                properties:
-                  data:
-                    $ref: '#/components/schemas/UUID'
-                required:
-                  - data
-    badrequest:
-      description: Invalid input
+            $ref: '#/components/schemas/UUID'
+    204NoContent:
+      description: No Content. Successful operation
+    400BadRequest:
+      description: Bad Request. Invalid input
       content:
         application/json:
           schema:
@@ -1236,8 +1108,8 @@ components:
               - statusCode
               - error
               - message
-    notfound:
-      description: Item not found
+    404NotFound:
+      description: Not Found. URL or item not found
       content:
         application/json:
           schema:

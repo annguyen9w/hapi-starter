@@ -39,11 +39,7 @@ class ClassController extends HapiController implements IClassesController {
   })
   public async getClasses(request: Request, toolkit: ResponseToolkit) {
     const data = await this.classService.findAll();
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(data);
   }
 
   /**
@@ -74,10 +70,7 @@ class ClassController extends HapiController implements IClassesController {
     const payload: Class = this.classMapper.map(ClassDTO, Class, request.payload);
     payload.id = request.params.classId;
     await this.classService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
   /**
@@ -100,11 +93,7 @@ class ClassController extends HapiController implements IClassesController {
   public async addClass(request: Request, toolkit: ResponseToolkit) {
     const payload: Class = this.classMapper.map(ClassDTO, Class, request.payload);
     const item: Class|undefined = await this.classService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      data: item?.id,
-      message: 'Success'
-    });
+    return toolkit.response(item?.id).code(201);
   }
 
   /**
@@ -125,15 +114,11 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async getClassById(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.classService.findById(request.params.classId);
-    if (!data) {
+    const item = await this.classService.findById(request.params.classId);
+    if (!item) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(item);
   }
 
   /**
@@ -158,10 +143,7 @@ class ClassController extends HapiController implements IClassesController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
 }

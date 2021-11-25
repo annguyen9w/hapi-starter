@@ -41,11 +41,7 @@ class DriverController extends HapiController implements IDriversController {
   })
   public async getDrivers(request: Request, toolkit: ResponseToolkit) {
     const data = await this.driverService.findAll();
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(data);
   }
 
   /**
@@ -80,10 +76,7 @@ class DriverController extends HapiController implements IDriversController {
     const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
     payload.id = request.params.driverId;
     await this.driverService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
   /**
@@ -110,11 +103,7 @@ class DriverController extends HapiController implements IDriversController {
   public async addDriver(request: Request, toolkit: ResponseToolkit) {
     const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
     const driver: Driver|undefined = await this.driverService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      data: driver?.id,
-      message: 'Success'
-    });
+    return toolkit.response(driver?.id).code(201);
   }
 
   /**
@@ -135,15 +124,11 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async getDriverById(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.driverService.findById(request.params.driverId);
-    if (!data) {
+    const item = await this.driverService.findById(request.params.driverId);
+    if (!item) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(item);
   }
 
   /**
@@ -168,10 +153,7 @@ class DriverController extends HapiController implements IDriversController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
   /**
@@ -197,11 +179,7 @@ class DriverController extends HapiController implements IDriversController {
       throw Boom.notFound();
     }
     const data = await this.raceResultService.findByQuery({ driver: request.params.driverId });
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(data);
   }
 }
 

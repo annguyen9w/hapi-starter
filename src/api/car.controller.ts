@@ -46,11 +46,7 @@ class CarController extends HapiController implements ICarsController {
   })
   public async getCars(request: Request, toolkit: ResponseToolkit) {
     const data = await this.carService.findAllByQuery(request.query);
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(data);
   }
 
   /**
@@ -84,10 +80,7 @@ class CarController extends HapiController implements ICarsController {
     const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
     payload.id = request.params.carId;
     await this.carService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
   /**
@@ -113,11 +106,7 @@ class CarController extends HapiController implements ICarsController {
   public async addCar(request: Request, toolkit: ResponseToolkit) {
     const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
     const car: Car|undefined = await this.carService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      data: car?.id,
-      message: 'Success'
-    });
+    return toolkit.response(car?.id).code(201);
   }
 
   /**
@@ -138,15 +127,11 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async getCarById(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.carService.findById(request.params.carId);
-    if (!data) {
+    const item = await this.carService.findById(request.params.carId);
+    if (!item) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(item);
   }
 
   /**
@@ -171,10 +156,7 @@ class CarController extends HapiController implements ICarsController {
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
   /**
@@ -200,11 +182,7 @@ class CarController extends HapiController implements ICarsController {
       throw Boom.notFound();
     }
     const data = await this.raceResultService.findByQuery({ car: request.params.carId })
-    return toolkit.response({
-      statusCode: 200,
-      data,
-      message: 'Success'
-    });
+    return toolkit.response(data);
   }
 }
 

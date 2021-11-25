@@ -58,10 +58,7 @@ class RaceResultController extends HapiController implements IRaceResultsControl
     const payload: RaceResult = this.RaceResultMapper.map(RaceResultDTO, RaceResult, request.payload);
     payload.id = request.params.raceResultId;
     await this.RaceResultService.save(payload);
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
 /**
@@ -86,10 +83,7 @@ class RaceResultController extends HapiController implements IRaceResultsControl
     if (!result.affected) {
       throw Boom.notFound();
     }
-    return toolkit.response({
-      statusCode: 200,
-      message: 'Success'
-    });
+    return toolkit.response().code(204);
   }
 
 }
