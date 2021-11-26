@@ -1071,8 +1071,10 @@ components:
           schema:
             type: object
             properties:
-              raceResult:
-                $ref: '#/components/schemas/RaceResultRequestBody'
+              raceResults:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RaceResultRequestBody'
             required:
               - raceResult
       required: true
