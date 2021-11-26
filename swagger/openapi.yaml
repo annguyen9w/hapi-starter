@@ -1069,9 +1069,12 @@ components:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: '#/components/schemas/RaceResultRequestBody'
+            type: object
+            properties:
+              raceResult:
+                $ref: '#/components/schemas/RaceResultRequestBody'
+            required:
+              - raceResult
       required: true
     RaceResult:
       content:
