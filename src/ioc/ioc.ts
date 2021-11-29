@@ -1,48 +1,41 @@
-import { Container } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from './types';
-import { HelloWorldController } from '../api/helloworld-controller';
-import { ApiServer } from '../apiserver';
-import { Controllers } from '../api/controllers';
-import { getConnection, Repository } from 'typeorm';
-import * as Winston from 'winston';
-import { Mapper } from '../helpers/mapper';
-const Configue = require('configue');
+import { Container } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from './types'
+import { HelloWorldController } from '../api/helloworld-controller'
+import { ApiServer } from '../apiserver'
+import { Controllers } from '../api/controllers'
+import { getConnection, Repository } from 'typeorm'
+import * as Winston from 'winston'
+import { Mapper } from '../helpers/mapper'
+const Configue = require('configue')
 
-import { Address } from '../entity/Address';
-import { AddressService } from '../service/address';
-import { AddressController } from '../api/address.controller';
-import { AddressMapper } from '../helpers/mapper/address';
+import { Address } from '../entity/Address'
+import { AddressService } from '../service/address'
+import { AddressController } from '../api/address.controller'
 
-import { Class } from '../entity/Class';
-import { ClassService } from '../service/class';
-import { ClassController } from '../api/class.controller';
-import { ClassMapper } from '../helpers/mapper/class';
+import { Class } from '../entity/Class'
+import { ClassService } from '../service/class'
+import { ClassController } from '../api/class.controller'
 
-import { Team } from '../entity/Team';
-import { TeamService } from '../service/team';
-import { TeamController } from '../api/team.controller';
-import { TeamMapper } from '../helpers/mapper/team';
+import { Team } from '../entity/Team'
+import { TeamService } from '../service/team'
+import { TeamController } from '../api/team.controller'
 
-import { Driver } from '../entity/Driver';
-import { DriverService } from '../service/driver';
-import { DriverController } from '../api/driver.controller';
-import { DriverMapper } from '../helpers/mapper/driver';
+import { Driver } from '../entity/Driver'
+import { DriverService } from '../service/driver'
+import { DriverController } from '../api/driver.controller'
 
-import { Car } from '../entity/Car';
-import { CarService } from '../service/car';
-import { CarController } from '../api/car.controller';
-import { CarMapper } from '../helpers/mapper/car';
+import { Car } from '../entity/Car'
+import { CarService } from '../service/car'
+import { CarController } from '../api/car.controller'
 
-import { Race } from '../entity/Race';
-import { RaceService } from '../service/race';
-import { RaceController } from '../api/race.controller';
-import { RaceMapper } from '../helpers/mapper/race';
+import { Race } from '../entity/Race'
+import { RaceService } from '../service/race'
+import { RaceController } from '../api/race.controller'
 
-import { RaceResult } from '../entity/RaceResult';
-import { RaceResultService } from '../service/race-result';
-import { RaceResultController } from '../api/race-result.controller';
-import { RaceResultMapper } from '../helpers/mapper/race-result';
+import { RaceResult } from '../entity/RaceResult'
+import { RaceResultService } from '../service/race-result'
+import { RaceResultController } from '../api/race-result.controller'
 
 /**
  * This file contains all of the Inversify configuration code.  This is the only
@@ -56,7 +49,7 @@ import { RaceResultMapper } from '../helpers/mapper/race-result';
  * managed (for example, is it a singleton, or does each reference get its own 
  * instance?) and let the container manage instantiating and injecting dependencies.
  */
-const container = new Container();
+const container = new Container()
 
 
 /**
@@ -76,37 +69,37 @@ const configOpts = {
       format: require('nconf-yaml')
     }
   ]
-};
-const configue = new Configue(configOpts);
-container.bind<typeof Configue>(TYPES.Configue).toConstantValue(configue);
+}
+const configue = new Configue(configOpts)
+container.bind<typeof Configue>(TYPES.Configue).toConstantValue(configue)
 
 /**
  * Configure Winston for logging
  */
 container.bind<Logger>(TYPES.Logger).toDynamicValue(
-    () => {
-        const consoleTransport = new Winston.transports.Console({
-            format: Winston.format.combine(
-              Winston.format.colorize(),
-              Winston.format.timestamp(),
-              Winston.format.align(),
-              Winston.format.printf(info => {
-                const { timestamp, level, message, ...args } = info;
+  () => {
+    const consoleTransport = new Winston.transports.Console({
+      format: Winston.format.combine(
+        Winston.format.colorize(),
+        Winston.format.timestamp(),
+        Winston.format.align(),
+        Winston.format.printf(info => {
+          const { timestamp, level, message, ...args } = info
       
-                const ts = timestamp.slice(0, 19).replace('T', ' ');
-                return `${ts} [${level}]: ${message} ${
-                  Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
-                }`;
-              })
-            ),
-            level: configue.get('logging.level'),
-          });
+          const ts = timestamp.slice(0, 19).replace('T', ' ')
+          return `${ts} [${level}]: ${message} ${
+            Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
+          }`
+        })
+      ),
+      level: configue.get('logging.level')
+    })
       
-          return Winston.createLogger({
-            transports: [consoleTransport],
-          });
-    }
-).inSingletonScope();
+    return Winston.createLogger({
+      transports: [consoleTransport]
+    })
+  }
+).inSingletonScope()
 
 // "Global" classes - things that aren't controllers, repositories, or services.
 /**
@@ -128,18 +121,16 @@ container.bind<Logger>(TYPES.Logger).toDynamicValue(
  * part of the declaration tells Inversify that we want everyone who needs an ApiServer to
  * get the same instance of ApiServer.
  */
-container.bind<Mapper>(TYPES.Mapper).to(Mapper).inSingletonScope();
-container.bind<ApiServer>(TYPES.ApiServer).to(ApiServer).inSingletonScope();
-container.bind<Controllers>(TYPES.Controllers).to(Controllers).inSingletonScope();
+container.bind<Mapper>(TYPES.Mapper).to(Mapper).inSingletonScope()
+container.bind<ApiServer>(TYPES.ApiServer).to(ApiServer).inSingletonScope()
+container.bind<Controllers>(TYPES.Controllers).to(Controllers).inSingletonScope()
 
-// Mapper
-container.bind<AddressMapper>(TYPES.AddressMapper).to(AddressMapper).inSingletonScope();
-container.bind<ClassMapper>(TYPES.ClassMapper).to(ClassMapper).inSingletonScope();
-container.bind<TeamMapper>(TYPES.TeamMapper).to(TeamMapper).inSingletonScope();
-container.bind<DriverMapper>(TYPES.DriverMapper).to(DriverMapper).inSingletonScope();
-container.bind<CarMapper>(TYPES.CarMapper).to(CarMapper).inSingletonScope();
-container.bind<RaceMapper>(TYPES.RaceMapper).to(RaceMapper).inSingletonScope();
-container.bind<RaceResultMapper>(TYPES.RaceResultMapper).to(RaceResultMapper).inSingletonScope();
+/**
+ * Utility function to create TypeORM repositories from their types through generics
+ */
+function createRepository<T>(c: { new (): T }): Repository<T> {
+  return getConnection().getRepository(c)
+}
 
 // Repositories
 container.bind<Repository<Address>>(TYPES.AddressRepository).toDynamicValue(() => createRepository<Address>(Address)).inSingletonScope()
@@ -151,29 +142,22 @@ container.bind<Repository<Race>>(TYPES.RaceRepository).toDynamicValue(() => crea
 container.bind<Repository<RaceResult>>(TYPES.RaceResultRepository).toDynamicValue(() => createRepository<RaceResult>(RaceResult)).inSingletonScope()
 
 // Services
-container.bind<AddressService>(TYPES.AddressService).to(AddressService).inSingletonScope();
-container.bind<ClassService>(TYPES.ClassService).to(ClassService).inSingletonScope();
-container.bind<TeamService>(TYPES.TeamService).to(TeamService).inSingletonScope();
-container.bind<DriverService>(TYPES.DriverService).to(DriverService).inSingletonScope();
-container.bind<CarService>(TYPES.CarService).to(CarService).inSingletonScope();
-container.bind<RaceService>(TYPES.RaceService).to(RaceService).inSingletonScope();
-container.bind<RaceResultService>(TYPES.RaceResultService).to(RaceResultService).inSingletonScope();
+container.bind<AddressService>(TYPES.AddressService).to(AddressService).inSingletonScope()
+container.bind<ClassService>(TYPES.ClassService).to(ClassService).inSingletonScope()
+container.bind<TeamService>(TYPES.TeamService).to(TeamService).inSingletonScope()
+container.bind<DriverService>(TYPES.DriverService).to(DriverService).inSingletonScope()
+container.bind<CarService>(TYPES.CarService).to(CarService).inSingletonScope()
+container.bind<RaceService>(TYPES.RaceService).to(RaceService).inSingletonScope()
+container.bind<RaceResultService>(TYPES.RaceResultService).to(RaceResultService).inSingletonScope()
 
 // Controllers
-container.bind<HelloWorldController>(TYPES.HelloWorldController).to(HelloWorldController).inSingletonScope();
-container.bind<AddressController>(TYPES.AddressController).to(AddressController).inSingletonScope();
-container.bind<ClassController>(TYPES.ClassController).to(ClassController).inSingletonScope();
-container.bind<TeamController>(TYPES.TeamController).to(TeamController).inSingletonScope();
-container.bind<DriverController>(TYPES.DriverController).to(DriverController).inSingletonScope();
-container.bind<CarController>(TYPES.CarController).to(CarController).inSingletonScope();
-container.bind<RaceController>(TYPES.RaceController).to(RaceController).inSingletonScope();
-container.bind<RaceResultController>(TYPES.RaceResultController).to(RaceResultController).inSingletonScope();
-
-/**
- * Utility function to create TypeORM repositories from their types through generics
- */
- function createRepository<T>(c: { new (): T }): Repository<T> {
-  return getConnection().getRepository(c);
-}
+container.bind<HelloWorldController>(TYPES.HelloWorldController).to(HelloWorldController).inSingletonScope()
+container.bind<AddressController>(TYPES.AddressController).to(AddressController).inSingletonScope()
+container.bind<ClassController>(TYPES.ClassController).to(ClassController).inSingletonScope()
+container.bind<TeamController>(TYPES.TeamController).to(TeamController).inSingletonScope()
+container.bind<DriverController>(TYPES.DriverController).to(DriverController).inSingletonScope()
+container.bind<CarController>(TYPES.CarController).to(CarController).inSingletonScope()
+container.bind<RaceController>(TYPES.RaceController).to(RaceController).inSingletonScope()
+container.bind<RaceResultController>(TYPES.RaceResultController).to(RaceResultController).inSingletonScope()
 
 export { container }

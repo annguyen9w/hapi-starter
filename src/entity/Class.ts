@@ -1,12 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 
 @Entity()
 class Class {
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+    id?: string
 
   @Column('varchar', { length: 100 })
-  name?: string;
+    name?: string
 }
 
 export { Class }

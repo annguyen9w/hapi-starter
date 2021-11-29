@@ -1,27 +1,27 @@
-import { Request, ResponseToolkit } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
-import * as Boom from '@hapi/boom';
-import { inject, injectable } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from '../ioc/types';
-import { HapiRoute } from '../decorators/decorators';
-import { HapiController } from './hapi-controller';
+import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as Joi from '@hapi/joi'
+import * as Boom from '@hapi/boom'
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from '../ioc/types'
+import { HapiRoute } from '../decorators/decorators'
+import { HapiController } from './hapi-controller'
 
-import { IClassesController } from './interfaces/classes.interface';
-import { ClassService } from '../service/class';
-import { ClassDTO } from '../dto/class';
-import { Class } from '../entity/Class';
-import { ClassMapper } from '../helpers/mapper/class';
+import { IClassesController } from './interfaces/classes.interface'
+import { ClassService } from '../service/class'
+import { ClassDTO } from '../dto/class'
+import { Class } from '../entity/Class'
+import { Mapper } from '../helpers/mapper'
 
 @injectable()
 class ClassController extends HapiController implements IClassesController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.ClassMapper) private classMapper: ClassMapper,
+    @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.ClassService) private classService: ClassService) {
-    super();
-    this.logger.info('Created controller ClassController');
+    super()
+    this.logger.info('Created controller ClassController')
   }
 
   /**
@@ -38,8 +38,8 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async getClasses(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.classService.findAll();
-    return toolkit.response(data);
+    const data = await this.classService.findAll()
+    return toolkit.response(data)
   }
 
   /**
@@ -63,14 +63,14 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async updateClass(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.classService.findById(request.params.classId);
+    const item = await this.classService.findById(request.params.classId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    const payload: Class = this.classMapper.map(ClassDTO, Class, request.payload);
-    payload.id = request.params.classId;
-    await this.classService.save(payload);
-    return toolkit.response().code(204);
+    const payload: Class = this.mapper.map(ClassDTO, Class, request.payload)
+    payload.id = request.params.classId
+    await this.classService.save(payload)
+    return toolkit.response().code(204)
   }
 
   /**
@@ -91,9 +91,9 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async addClass(request: Request, toolkit: ResponseToolkit) {
-    const payload: Class = this.classMapper.map(ClassDTO, Class, request.payload);
-    const item: Class|undefined = await this.classService.save(payload);
-    return toolkit.response(item?.id).code(201);
+    const payload: Class = this.mapper.map(ClassDTO, Class, request.payload)
+    const item: Class | undefined = await this.classService.save(payload)
+    return toolkit.response(item?.id).code(201)
   }
 
   /**
@@ -114,11 +114,11 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async getClassById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.classService.findById(request.params.classId);
+    const item = await this.classService.findById(request.params.classId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    return toolkit.response(item);
+    return toolkit.response(item)
   }
 
   /**
@@ -140,13 +140,13 @@ class ClassController extends HapiController implements IClassesController {
   })
   public async deleteClass(request: Request, toolkit: ResponseToolkit) {
     try {
-      const result = await this.classService.delete(request.params.classId);
+      const result = await this.classService.delete(request.params.classId)
       if (!result.affected) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      return toolkit.response().code(204);
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 

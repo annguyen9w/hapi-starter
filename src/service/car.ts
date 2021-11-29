@@ -1,19 +1,19 @@
-import { inject, injectable } from "inversify";
-import { Logger } from "winston";
-import { Repository, Like } from "typeorm";
-import { TYPES } from "../ioc/types";
-import { CrudService } from "./crudservice";
-import { Car } from "../entity/Car";
-import { CarQueryDTO } from "../dto/car";
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { Repository, Like } from 'typeorm'
+import { TYPES } from '../ioc/types'
+import { CrudService } from './crudservice'
+import { Car } from '../entity/Car'
+import { CarQueryDTO } from '../dto/car'
 
 @injectable()
 class CarService extends CrudService<Car> {
   constructor(
-    @inject(TYPES.CarRepository) repository: Repository<Car>,
+  @inject(TYPES.CarRepository) repository: Repository<Car>,
     @inject(TYPES.Logger) logger: Logger
   ) {
-    super(repository, logger);
-    this.logger.info('Created CarService');
+    super(repository, logger)
+    this.logger.info('Created CarService')
   }
 
   public async findById(id: string): Promise<Car | undefined> {
@@ -21,11 +21,11 @@ class CarService extends CrudService<Car> {
       where: { id },
       relations: ['class', 'team', 'team.businessAddress']
     })
-    return result;
+    return result
   }
 
   public async findAllByQuery(query: CarQueryDTO): Promise<Array<Car>> {
-    let whereObj: CarQueryDTO = {};
+    const whereObj: CarQueryDTO = {}
     if (query.make) {
       whereObj.make = Like(`%${query.make}%`)
     }
@@ -35,8 +35,8 @@ class CarService extends CrudService<Car> {
     const result = await this.repository.find({
       where: whereObj,
       relations: ['class', 'team', 'team.businessAddress']
-    });
-    return result;
+    })
+    return result
   }
 }
 

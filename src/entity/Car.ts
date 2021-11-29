@@ -1,18 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { Class } from './Class';
-import { RaceResult } from './RaceResult';
-import { Team } from './Team';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import { Class } from './Class'
+import { RaceResult } from './RaceResult'
+import { Team } from './Team'
 
 @Entity()
 class Car {
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+    id?: string
 
   @Column('varchar', { length: 40 })
-  make?: string;
+    make?: string
 
   @Column('varchar', { length: 40 })
-  model?: string;
+    model?: string
 
   // @Column('varchar', {
   //     nullable: false,
@@ -28,13 +28,13 @@ class Car {
   // entryNumber?: number;
 
   @ManyToOne(() => Class)
-  class?: Class;
+    class?: Class
 
   @ManyToOne(() => Team, team => team.cars)
-  team?: Team;
+    team?: Team
 
   @OneToMany(() => RaceResult, raceResult => raceResult.car)
-  raceResults?: RaceResult[]
+    raceResults?: RaceResult[]
 }
 
 export { Car }

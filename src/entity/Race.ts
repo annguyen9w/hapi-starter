@@ -1,16 +1,16 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { RaceResult } from './RaceResult';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { RaceResult } from './RaceResult'
 
 @Entity()
 class Race {
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+    id?: string
 
   @Column('varchar', { length: 100 })
-  name?: string;
+    name?: string
 
   @OneToMany(() => RaceResult, raceResult => raceResult.race)
-  raceResults?: RaceResult[]
+    raceResults?: RaceResult[]
 }
 
 export { Race }

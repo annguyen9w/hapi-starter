@@ -1,29 +1,29 @@
-import { Request, ResponseToolkit } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
-import * as Boom from '@hapi/boom';
-import { inject, injectable } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from '../ioc/types';
-import { HapiRoute } from '../decorators/decorators';
-import { HapiController } from './hapi-controller';
+import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as Joi from '@hapi/joi'
+import * as Boom from '@hapi/boom'
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from '../ioc/types'
+import { HapiRoute } from '../decorators/decorators'
+import { HapiController } from './hapi-controller'
 
-import { IDriversController } from './interfaces/drivers.interface';
-import { DriverService } from '../service/driver';
-import { DriverDTO } from '../dto/driver';
-import { Driver } from '../entity/Driver';
-import { DriverMapper } from '../helpers/mapper/driver';
-import { RaceResultService } from '../service/race-result';
+import { IDriversController } from './interfaces/drivers.interface'
+import { DriverService } from '../service/driver'
+import { DriverDTO } from '../dto/driver'
+import { Driver } from '../entity/Driver'
+import { Mapper } from '../helpers/mapper'
+import { RaceResultService } from '../service/race-result'
 
 @injectable()
 class DriverController extends HapiController implements IDriversController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.DriverMapper) private driverMapper: DriverMapper,
+    @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.DriverService) private driverService: DriverService,
     @inject(TYPES.RaceResultService) private raceResultService: RaceResultService) {
-    super();
-    this.logger.info('Created controller DriverController');
+    super()
+    this.logger.info('Created controller DriverController')
   }
 
   /**
@@ -40,8 +40,8 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async getDrivers(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.driverService.findAll();
-    return toolkit.response(data);
+    const data = await this.driverService.findAll()
+    return toolkit.response(data)
   }
 
   /**
@@ -70,16 +70,16 @@ class DriverController extends HapiController implements IDriversController {
   })
   public async updateDriver(request: Request, toolkit: ResponseToolkit) {
     try {
-      const item = await this.driverService.findById(request.params.driverId);
+      const item = await this.driverService.findById(request.params.driverId)
       if (!item) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
-      payload.id = request.params.driverId;
-      await this.driverService.save(payload);
-      return toolkit.response().code(204);
+      const payload: Driver = this.mapper.map(DriverDTO, Driver, request.payload)
+      payload.id = request.params.driverId
+      await this.driverService.save(payload)
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -106,11 +106,11 @@ class DriverController extends HapiController implements IDriversController {
   })
   public async addDriver(request: Request, toolkit: ResponseToolkit) {
     try {
-      const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
-      const driver: Driver|undefined = await this.driverService.save(payload);
-      return toolkit.response(driver?.id).code(201);
+      const payload: Driver = this.mapper.map(DriverDTO, Driver, request.payload)
+      const driver: Driver | undefined = await this.driverService.save(payload)
+      return toolkit.response(driver?.id).code(201)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -132,11 +132,11 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async getDriverById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.driverService.findById(request.params.driverId);
+    const item = await this.driverService.findById(request.params.driverId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    return toolkit.response(item);
+    return toolkit.response(item)
   }
 
   /**
@@ -158,13 +158,13 @@ class DriverController extends HapiController implements IDriversController {
   })
   public async deleteDriver(request: Request, toolkit: ResponseToolkit) {
     try {
-      const result = await this.driverService.delete(request.params.driverId);
+      const result = await this.driverService.delete(request.params.driverId)
       if (!result.affected) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      return toolkit.response().code(204);
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -186,12 +186,12 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async getRaceResultsByDriverId(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.driverService.findById(request.params.driverId);
+    const item = await this.driverService.findById(request.params.driverId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    const data = await this.raceResultService.findByQuery({ driver: request.params.driverId });
-    return toolkit.response(data);
+    const data = await this.raceResultService.findByQuery({ driver: request.params.driverId })
+    return toolkit.response(data)
   }
 }
 

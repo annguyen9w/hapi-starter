@@ -1,29 +1,29 @@
-import { Request, ResponseToolkit } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
-import * as Boom from '@hapi/boom';
-import { inject, injectable } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from '../ioc/types';
-import { HapiRoute } from '../decorators/decorators';
-import { HapiController } from './hapi-controller';
+import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as Joi from '@hapi/joi'
+import * as Boom from '@hapi/boom'
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from '../ioc/types'
+import { HapiRoute } from '../decorators/decorators'
+import { HapiController } from './hapi-controller'
 
-import { ITeamsController } from './interfaces/teams.interface';
-import { TeamService } from '../service/team';
-import { TeamDTO } from '../dto/team';
-import { Team } from '../entity/Team';
-import { TeamMapper } from '../helpers/mapper/team';
-import { DriverService } from '../service/driver';
+import { ITeamsController } from './interfaces/teams.interface'
+import { TeamService } from '../service/team'
+import { TeamDTO } from '../dto/team'
+import { Team } from '../entity/Team'
+import { Mapper } from '../helpers/mapper'
+import { DriverService } from '../service/driver'
 
 @injectable()
 class TeamController extends HapiController implements ITeamsController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.TeamMapper) private teamMapper: TeamMapper,
+    @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.TeamService) private teamService: TeamService,
     @inject(TYPES.DriverService) private driverService: DriverService) {
-    super();
-    this.logger.info('Created controller TeamController');
+    super()
+    this.logger.info('Created controller TeamController')
   }
 
   /**
@@ -40,8 +40,8 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async getTeams(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.teamService.findAll();
-    return toolkit.response(data);
+    const data = await this.teamService.findAll()
+    return toolkit.response(data)
   }
 
   /**
@@ -69,20 +69,20 @@ class TeamController extends HapiController implements ITeamsController {
   })
   public async updateTeam(request: Request, toolkit: ResponseToolkit) {
     try {
-      const item = await this.teamService.findById(request.params.teamId);
+      const item = await this.teamService.findById(request.params.teamId)
       if (!item) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      const payload: Team = this.teamMapper.map(TeamDTO, Team, request.payload);
-      payload.id = request.params.teamId;
+      const payload: Team = this.mapper.map(TeamDTO, Team, request.payload)
+      payload.id = request.params.teamId
       if (payload.drivers && payload.drivers.length) {
-        const drivers = await this.driverService.findByIds(payload.drivers);
+        const drivers = await this.driverService.findByIds(payload.drivers)
         payload.drivers = drivers
       }
-      await this.teamService.save(payload);
-      return toolkit.response().code(204);
+      await this.teamService.save(payload)
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -108,15 +108,15 @@ class TeamController extends HapiController implements ITeamsController {
   })
   public async addTeam(request: Request, toolkit: ResponseToolkit) {
     try {
-      const payload: Team = this.teamMapper.map(TeamDTO, Team, request.payload);
+      const payload: Team = this.mapper.map(TeamDTO, Team, request.payload)
       if (payload.drivers && payload.drivers.length) {
-        const drivers = await this.driverService.findByIds(payload.drivers);
+        const drivers = await this.driverService.findByIds(payload.drivers)
         payload.drivers = drivers
       }
-      const team :Team|undefined = await this.teamService.save(payload);
-      return toolkit.response(team?.id).code(201);
+      const team :Team | undefined = await this.teamService.save(payload)
+      return toolkit.response(team?.id).code(201)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -138,11 +138,11 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async getTeamById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.teamService.findById(request.params.teamId);
+    const item = await this.teamService.findById(request.params.teamId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    return toolkit.response(item);
+    return toolkit.response(item)
   }
 
   /**
@@ -164,13 +164,13 @@ class TeamController extends HapiController implements ITeamsController {
   })
   public async deleteTeam(request: Request, toolkit: ResponseToolkit) {
     try {
-      const result = await this.teamService.delete(request.params.teamId);
+      const result = await this.teamService.delete(request.params.teamId)
       if (!result.affected) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      return toolkit.response().code(204);
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 

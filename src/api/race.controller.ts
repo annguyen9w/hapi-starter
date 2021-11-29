@@ -1,34 +1,32 @@
-import { Request, ResponseToolkit } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
-import * as Boom from '@hapi/boom';
-import { inject, injectable } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from '../ioc/types';
-import { HapiRoute } from '../decorators/decorators';
-import { HapiController } from './hapi-controller';
+import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as Joi from '@hapi/joi'
+import * as Boom from '@hapi/boom'
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from '../ioc/types'
+import { HapiRoute } from '../decorators/decorators'
+import { HapiController } from './hapi-controller'
 
-import { IRacesController } from './interfaces/races.interface';
-import { RaceService } from '../service/race';
-import { RaceDTO } from '../dto/race';
-import { Race } from '../entity/Race';
-import { RaceMapper } from '../helpers/mapper/race';
-import { RaceResultService } from '../service/race-result';
+import { IRacesController } from './interfaces/races.interface'
+import { RaceService } from '../service/race'
+import { RaceDTO } from '../dto/race'
+import { Race } from '../entity/Race'
+import { Mapper } from '../helpers/mapper'
+import { RaceResultService } from '../service/race-result'
 
-import { RaceResultDTO } from '../dto/race-result';
-import { RaceResult } from '../entity/RaceResult';
-import { RaceResultMapper } from '../helpers/mapper/race-result';
+import { RaceResultDTO } from '../dto/race-result'
+import { RaceResult } from '../entity/RaceResult'
 
 @injectable()
 class RaceController extends HapiController implements IRacesController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.RaceMapper) private raceMapper: RaceMapper,
-    @inject(TYPES.RaceResultMapper) private raceResultMapper: RaceResultMapper,
+    @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.RaceService) private raceService: RaceService,
     @inject(TYPES.RaceResultService) private raceResultService: RaceResultService) {
-    super();
-    this.logger.info('Created controller RaceController');
+    super()
+    this.logger.info('Created controller RaceController')
   }
 
   /**
@@ -45,8 +43,8 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async getRaces(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.raceService.findAll();
-    return toolkit.response(data);
+    const data = await this.raceService.findAll()
+    return toolkit.response(data)
   }
 
   /**
@@ -71,16 +69,16 @@ class RaceController extends HapiController implements IRacesController {
   })
   public async updateRace(request: Request, toolkit: ResponseToolkit) {
     try {
-      const item = await this.raceService.findById(request.params.raceId);
+      const item = await this.raceService.findById(request.params.raceId)
       if (!item) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
-      payload.id = request.params.raceId;
-      await this.raceService.save(payload);
-      return toolkit.response().code(204);
+      const payload: Race = this.mapper.map(RaceDTO, Race, request.payload)
+      payload.id = request.params.raceId
+      await this.raceService.save(payload)
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -100,7 +98,7 @@ class RaceController extends HapiController implements IRacesController {
             class: Joi.string().length(36).required(),
             raceNumber: Joi.string().required(),
             startPosition: Joi.number().required(),
-            finishPosition: Joi.number().allow(null),
+            finishPosition: Joi.number().allow(null)
           }))
         }
       },
@@ -111,18 +109,18 @@ class RaceController extends HapiController implements IRacesController {
   })
   public async addRace(request: Request, toolkit: ResponseToolkit) {
     try {
-      const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
-      const race = await this.raceService.save(payload);
+      const payload: Race = this.mapper.map(RaceDTO, Race, request.payload)
+      const race = await this.raceService.save(payload)
       if (race && payload.raceResults) {
         for (const raceResult of payload.raceResults) {
-          const raceResultMapper = this.raceResultMapper.map(RaceResultDTO, RaceResult, raceResult);
-          raceResultMapper.race = race.id;
-          await this.raceResultService.save(raceResultMapper);
+          const raceResultMapper = this.mapper.map(RaceResultDTO, RaceResult, raceResult)
+          raceResultMapper.race = race.id
+          await this.raceResultService.save(raceResultMapper)
         }
       }
-      return toolkit.response(race?.id).code(201);
+      return toolkit.response(race?.id).code(201)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -144,11 +142,11 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async getRaceById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.raceService.findById(request.params.raceId);
+    const item = await this.raceService.findById(request.params.raceId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    return toolkit.response(item);
+    return toolkit.response(item)
   }
 
   /**
@@ -170,13 +168,13 @@ class RaceController extends HapiController implements IRacesController {
   })
   public async deleteRace(request: Request, toolkit: ResponseToolkit) {
     try {
-      const result = await this.raceService.delete(request.params.raceId);
+      const result = await this.raceService.delete(request.params.raceId)
       if (!result.affected) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      return toolkit.response().code(204);
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -198,12 +196,12 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async getRaceResultsByRaceId(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.raceService.findById(request.params.raceId);
+    const item = await this.raceService.findById(request.params.raceId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    const data = await this.raceResultService.findByQuery({ race: request.params.raceId });
-    return toolkit.response(data);
+    const data = await this.raceResultService.findByQuery({ race: request.params.raceId })
+    return toolkit.response(data)
   }
 
   /**
@@ -224,7 +222,7 @@ class RaceController extends HapiController implements IRacesController {
             class: Joi.string().length(36).required(),
             raceNumber: Joi.string().required(),
             startPosition: Joi.number().required(),
-            finishPosition: Joi.number().allow(null),
+            finishPosition: Joi.number().allow(null)
           }))
         }
       },
@@ -235,21 +233,21 @@ class RaceController extends HapiController implements IRacesController {
   })
   public async addRaceResults(request: Request, toolkit: ResponseToolkit) {
     try {
-      const item = await this.raceService.findById(request.params.raceId);
+      const item = await this.raceService.findById(request.params.raceId)
       if (!item) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
+      const payload: Race = this.mapper.map(RaceDTO, Race, request.payload)
       if (payload.raceResults) {
         for (const raceResult of payload.raceResults) {
-          const raceResultMapper = this.raceResultMapper.map(RaceResultDTO, RaceResult, raceResult);
-          raceResultMapper.race = request.params.raceId;
-          await this.raceResultService.save(raceResultMapper);
+          const raceResultMapper = this.mapper.map(RaceResultDTO, RaceResult, raceResult)
+          raceResultMapper.race = request.params.raceId
+          await this.raceResultService.save(raceResultMapper)
         }
       }
-      return toolkit.response().code(201);
+      return toolkit.response().code(201)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
