@@ -5,10 +5,10 @@ class Address {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  @Column('varchar', { nullable: true, length: 100 })
+  @Column('varchar', { nullable: true, length: 150 })
   street?: string;
 
-  @Column('varchar', { nullable: true, length: 100 })
+  @Column('varchar', { nullable: true, length: 150 })
   street2?: string;
 
   @Column('varchar', { length: 100 })

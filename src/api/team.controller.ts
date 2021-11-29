@@ -68,18 +68,22 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async updateTeam(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.teamService.findById(request.params.teamId);
-    if (!item) {
-      throw Boom.notFound();
+    try {
+      const item = await this.teamService.findById(request.params.teamId);
+      if (!item) {
+        throw Boom.notFound();
+      }
+      const payload: Team = this.teamMapper.map(TeamDTO, Team, request.payload);
+      payload.id = request.params.teamId;
+      if (payload.drivers && payload.drivers.length) {
+        const drivers = await this.driverService.findByIds(payload.drivers);
+        payload.drivers = drivers
+      }
+      await this.teamService.save(payload);
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    const payload: Team = this.teamMapper.map(TeamDTO, Team, request.payload);
-    payload.id = request.params.teamId;
-    if (payload.drivers && payload.drivers.length) {
-      const drivers = await this.driverService.findByIds(payload.drivers);
-      payload.drivers = drivers
-    }
-    await this.teamService.save(payload);
-    return toolkit.response().code(204);
   }
 
   /**
@@ -103,13 +107,17 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async addTeam(request: Request, toolkit: ResponseToolkit) {
-    const payload: Team = this.teamMapper.map(TeamDTO, Team, request.payload);
-    if (payload.drivers && payload.drivers.length) {
-      const drivers = await this.driverService.findByIds(payload.drivers);
-      payload.drivers = drivers
+    try {
+      const payload: Team = this.teamMapper.map(TeamDTO, Team, request.payload);
+      if (payload.drivers && payload.drivers.length) {
+        const drivers = await this.driverService.findByIds(payload.drivers);
+        payload.drivers = drivers
+      }
+      const team :Team|undefined = await this.teamService.save(payload);
+      return toolkit.response(team?.id).code(201);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    const team :Team|undefined = await this.teamService.save(payload);
-    return toolkit.response(team?.id).code(201);
   }
 
   /**
@@ -155,11 +163,15 @@ class TeamController extends HapiController implements ITeamsController {
     }
   })
   public async deleteTeam(request: Request, toolkit: ResponseToolkit) {
-    const result = await this.teamService.delete(request.params.teamId);
-    if (!result.affected) {
-      throw Boom.notFound();
+    try {
+      const result = await this.teamService.delete(request.params.teamId);
+      if (!result.affected) {
+        throw Boom.notFound();
+      }
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response().code(204);
   }
 
 }

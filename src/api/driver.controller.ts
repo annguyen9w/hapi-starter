@@ -69,14 +69,18 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async updateDriver(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.driverService.findById(request.params.driverId);
-    if (!item) {
-      throw Boom.notFound();
+    try {
+      const item = await this.driverService.findById(request.params.driverId);
+      if (!item) {
+        throw Boom.notFound();
+      }
+      const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
+      payload.id = request.params.driverId;
+      await this.driverService.save(payload);
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
-    payload.id = request.params.driverId;
-    await this.driverService.save(payload);
-    return toolkit.response().code(204);
   }
 
   /**
@@ -101,9 +105,13 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async addDriver(request: Request, toolkit: ResponseToolkit) {
-    const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
-    const driver: Driver|undefined = await this.driverService.save(payload);
-    return toolkit.response(driver?.id).code(201);
+    try {
+      const payload: Driver = this.driverMapper.map(DriverDTO, Driver, request.payload);
+      const driver: Driver|undefined = await this.driverService.save(payload);
+      return toolkit.response(driver?.id).code(201);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
+    }
   }
 
   /**
@@ -149,11 +157,15 @@ class DriverController extends HapiController implements IDriversController {
     }
   })
   public async deleteDriver(request: Request, toolkit: ResponseToolkit) {
-    const result = await this.driverService.delete(request.params.driverId);
-    if (!result.affected) {
-      throw Boom.notFound();
+    try {
+      const result = await this.driverService.delete(request.params.driverId);
+      if (!result.affected) {
+        throw Boom.notFound();
+      }
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response().code(204);
   }
 
   /**

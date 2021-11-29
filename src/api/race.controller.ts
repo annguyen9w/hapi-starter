@@ -70,14 +70,18 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async updateRace(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.raceService.findById(request.params.raceId);
-    if (!item) {
-      throw Boom.notFound();
+    try {
+      const item = await this.raceService.findById(request.params.raceId);
+      if (!item) {
+        throw Boom.notFound();
+      }
+      const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
+      payload.id = request.params.raceId;
+      await this.raceService.save(payload);
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
-    payload.id = request.params.raceId;
-    await this.raceService.save(payload);
-    return toolkit.response().code(204);
   }
 
   /**
@@ -106,16 +110,20 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async addRace(request: Request, toolkit: ResponseToolkit) {
-    const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
-    const race = await this.raceService.save(payload);
-    if (race && payload.raceResults) {
-      for (const raceResult of payload.raceResults) {
-        const raceResultMapper = this.raceResultMapper.map(RaceResultDTO, RaceResult, raceResult);
-        raceResultMapper.race = race.id;
-        await this.raceResultService.save(raceResultMapper);
+    try {
+      const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
+      const race = await this.raceService.save(payload);
+      if (race && payload.raceResults) {
+        for (const raceResult of payload.raceResults) {
+          const raceResultMapper = this.raceResultMapper.map(RaceResultDTO, RaceResult, raceResult);
+          raceResultMapper.race = race.id;
+          await this.raceResultService.save(raceResultMapper);
+        }
       }
+      return toolkit.response(race?.id).code(201);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response(race?.id).code(201);
   }
 
   /**
@@ -161,11 +169,15 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async deleteRace(request: Request, toolkit: ResponseToolkit) {
-    const result = await this.raceService.delete(request.params.raceId);
-    if (!result.affected) {
-      throw Boom.notFound();
+    try {
+      const result = await this.raceService.delete(request.params.raceId);
+      if (!result.affected) {
+        throw Boom.notFound();
+      }
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response().code(204);
   }
 
   /**
@@ -222,19 +234,23 @@ class RaceController extends HapiController implements IRacesController {
     }
   })
   public async addRaceResults(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.raceService.findById(request.params.raceId);
-    if (!item) {
-      throw Boom.notFound();
-    }
-    const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
-    if (payload.raceResults) {
-      for (const raceResult of payload.raceResults) {
-        const raceResultMapper = this.raceResultMapper.map(RaceResultDTO, RaceResult, raceResult);
-        raceResultMapper.race = request.params.raceId;
-        await this.raceResultService.save(raceResultMapper);
+    try {
+      const item = await this.raceService.findById(request.params.raceId);
+      if (!item) {
+        throw Boom.notFound();
       }
+      const payload: Race = this.raceMapper.map(RaceDTO, Race, request.payload);
+      if (payload.raceResults) {
+        for (const raceResult of payload.raceResults) {
+          const raceResultMapper = this.raceResultMapper.map(RaceResultDTO, RaceResult, raceResult);
+          raceResultMapper.race = request.params.raceId;
+          await this.raceResultService.save(raceResultMapper);
+        }
+      }
+      return toolkit.response().code(201);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response().code(201);
   }
 
 }

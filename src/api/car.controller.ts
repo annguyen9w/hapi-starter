@@ -73,14 +73,18 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async updateCar(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.carService.findById(request.params.carId);
-    if (!item) {
-      throw Boom.notFound();
+    try {
+      const item = await this.carService.findById(request.params.carId);
+      if (!item) {
+        throw Boom.notFound();
+      }
+      const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
+      payload.id = request.params.carId;
+      await this.carService.save(payload);
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
-    payload.id = request.params.carId;
-    await this.carService.save(payload);
-    return toolkit.response().code(204);
   }
 
   /**
@@ -104,9 +108,13 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async addCar(request: Request, toolkit: ResponseToolkit) {
-    const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
-    const car: Car|undefined = await this.carService.save(payload);
-    return toolkit.response(car?.id).code(201);
+    try {
+      const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
+      const car: Car|undefined = await this.carService.save(payload);
+      return toolkit.response(car?.id).code(201);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
+    }
   }
 
   /**
@@ -152,11 +160,15 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async deleteCar(request: Request, toolkit: ResponseToolkit) {
-    const result = await this.carService.delete(request.params.carId);
-    if (!result.affected) {
-      throw Boom.notFound();
+    try {
+      const result = await this.carService.delete(request.params.carId);
+      if (!result.affected) {
+        throw Boom.notFound();
+      }
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response().code(204);
   }
 
   /**

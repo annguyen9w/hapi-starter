@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToMany, OneToMany, ManyToOne } from 'typeorm';
 import { Address } from './Address';
 import { RaceResult } from './RaceResult';
 import { Team } from './Team';
@@ -25,15 +25,13 @@ class Driver {
   })
   nationality?: NationalityType;
   
-  @OneToOne(() => Address, address => address.id, { cascade: true })
-  @JoinColumn()
+  @ManyToOne(() => Address, address => address.id, { onDelete: 'SET NULL' })
   homeAddress?: Address;
 
-  @OneToOne(() => Address, address => address.id, { cascade: true })
-  @JoinColumn()
+  @ManyToOne(() => Address, address => address.id, { onDelete: 'SET NULL' })
   managementAddress?: Address;
 
-  @ManyToMany(() => Team, team => team.drivers)
+  @ManyToMany(() => Team, team => team.drivers, { onDelete: 'CASCADE' })
   teams?: Team[];
 
   @OneToMany(() => RaceResult, raceResult => raceResult.driver)

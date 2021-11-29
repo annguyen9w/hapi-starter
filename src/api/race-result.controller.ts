@@ -51,14 +51,18 @@ class RaceResultController extends HapiController implements IRaceResultsControl
     }
   })
   public async updateRaceResult(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.RaceResultService.findById(request.params.raceResultId);
-    if (!item) {
-      throw Boom.notFound();
+    try {
+      const item = await this.RaceResultService.findById(request.params.raceResultId);
+      if (!item) {
+        throw Boom.notFound();
+      }
+      const payload: RaceResult = this.RaceResultMapper.map(RaceResultDTO, RaceResult, request.payload);
+      payload.id = request.params.raceResultId;
+      await this.RaceResultService.save(payload);
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    const payload: RaceResult = this.RaceResultMapper.map(RaceResultDTO, RaceResult, request.payload);
-    payload.id = request.params.raceResultId;
-    await this.RaceResultService.save(payload);
-    return toolkit.response().code(204);
   }
 
 /**
@@ -79,11 +83,15 @@ class RaceResultController extends HapiController implements IRaceResultsControl
     }
   })
   public async deleteRaceResult(request: Request, toolkit: ResponseToolkit) {
-    const result = await this.RaceResultService.delete(request.params.raceResultId);
-    if (!result.affected) {
-      throw Boom.notFound();
+    try {
+      const result = await this.RaceResultService.delete(request.params.raceResultId);
+      if (!result.affected) {
+        throw Boom.notFound();
+      }
+      return toolkit.response().code(204);
+    } catch (error) {
+      throw Boom.badRequest(error as any);
     }
-    return toolkit.response().code(204);
   }
 
 }
