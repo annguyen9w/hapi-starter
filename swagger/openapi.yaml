@@ -29,7 +29,7 @@ paths:
     post:
       tags:
         - Class
-      summary: Add a new class to the system
+      summary: Create class
       operationId: addClass
       requestBody:
         $ref: '#/components/requestBodies/Class'
@@ -122,7 +122,7 @@ paths:
     post:
       tags:
         - Address
-      summary: Add a new address to the system
+      summary: Create address
       operationId: addAddress
       requestBody:
         $ref: '#/components/requestBodies/Address'
@@ -215,7 +215,7 @@ paths:
     post:
       tags:
         - Driver
-      summary: Add a new driver to the system
+      summary: Create driver
       operationId: addDriver
       requestBody:
         $ref: '#/components/requestBodies/Driver'
@@ -334,7 +334,7 @@ paths:
     post:
       tags:
         - Team
-      summary: Add a new team to the system
+      summary: Create team
       operationId: addTeam
       requestBody:
         $ref: '#/components/requestBodies/Team'
@@ -442,7 +442,7 @@ paths:
     post:
       tags:
         - Car
-      summary: Add a new car to the system
+      summary: Create car
       operationId: addCar
       requestBody:
         $ref: '#/components/requestBodies/Car'
@@ -561,7 +561,7 @@ paths:
     post:
       tags:
         - Race
-      summary: Add a new race to the system
+      summary: Create race
       operationId: addRace
       requestBody:
         $ref: '#/components/requestBodies/CreateRace'
