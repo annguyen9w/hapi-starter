@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, Unique } from 'typeorm';
 import { Car } from './Car';
 import { Race } from './Race';
 import { Driver } from './Driver';
 import { Class } from './Class';
 
 @Entity()
+@Unique('unique_car_race_driver', ['car', 'race', 'driver'])
 class RaceResult {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
