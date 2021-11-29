@@ -27,3 +27,9 @@
     + try jest for unit test: 1h
 - 11/25/2021
     + standardize response body and status code: 7h
+- 11/26/2021
+    + jest unit test with typescript: 4h
+    + support postman for QA team: 3h
+- 11/29/2021
+    + setup eslint: 3h
+    + jest unit test mock function: 4h

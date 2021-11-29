@@ -1,26 +1,27 @@
-import { Request, ResponseToolkit } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
-import * as Boom from '@hapi/boom';
-import { inject, injectable } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from '../ioc/types';
-import { HapiRoute } from '../decorators/decorators';
-import { HapiController } from './hapi-controller';
+import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as Joi from '@hapi/joi'
+import * as Boom from '@hapi/boom'
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from '../ioc/types'
+import { HapiRoute } from '../decorators/decorators'
+import { HapiController } from './hapi-controller'
 
-import { IAddressesController } from './interfaces/addresses.interface';
-import { AddressService } from '../service/address';
-import { AddressDTO } from '../dto/address';
-import { Address } from '../entity/Address';
-import { AddressMapper } from '../helpers/mapper/address';
+import { IAddressesController } from './interfaces/addresses.interface'
+import { AddressService } from '../service/address'
+import { AddressDTO } from '../dto/address'
+import { Address } from '../entity/Address'
+import { Mapper } from '../helpers/mapper'
 
 @injectable()
 class AddressController extends HapiController implements IAddressesController {
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.AddressMapper) private addressMapper: AddressMapper,
-    @inject(TYPES.AddressService) private addressService: AddressService) {
-    super();
-    this.logger.info('Created controller AddressController');
+    @inject(TYPES.Mapper) private mapper: Mapper,
+    @inject(TYPES.AddressService) private addressService: AddressService
+  ) {
+    super()
+    this.logger.info('Created controller AddressController')
   }
 
   /**
@@ -38,7 +39,7 @@ class AddressController extends HapiController implements IAddressesController {
   })
   public async getAddresses(request: Request, toolkit: ResponseToolkit) {
     const data = await this.addressService.findAll()
-    return toolkit.response(data);
+    return toolkit.response(data)
   }
 
   /**
@@ -67,14 +68,14 @@ class AddressController extends HapiController implements IAddressesController {
     }
   })
   public async updateAddress(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.addressService.findById(request.params.addressId);
+    const item = await this.addressService.findById(request.params.addressId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    const payload: Address = this.addressMapper.map(AddressDTO, Address, request.payload);
+    const payload: Address = this.mapper.map(AddressDTO, Address, request.payload)
     payload.id = request.params.addressId
-    await this.addressService.save(payload);
-    return toolkit.response().code(204);
+    await this.addressService.save(payload)
+    return toolkit.response().code(204)
   }
 
   /**
@@ -100,10 +101,10 @@ class AddressController extends HapiController implements IAddressesController {
     }
   })
   public async addAddress(request: Request, toolkit: ResponseToolkit) {
-    const payload: Address = this.addressMapper.map(AddressDTO, Address, request.payload);
-    await this.addressService.save(payload);
-    const address: Address|undefined = await this.addressService.save(payload);
-    return toolkit.response(address?.id).code(201);
+    const payload: Address = this.mapper.map(AddressDTO, Address, request.payload)
+    await this.addressService.save(payload)
+    const address: Address | undefined = await this.addressService.save(payload)
+    return toolkit.response(address?.id).code(201)
   }
 
   /**
@@ -124,11 +125,11 @@ class AddressController extends HapiController implements IAddressesController {
     }
   })
   public async getAddressById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.addressService.findById(request.params.addressId);
+    const item = await this.addressService.findById(request.params.addressId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    return toolkit.response(item);
+    return toolkit.response(item)
   }
 
   /**
@@ -150,16 +151,15 @@ class AddressController extends HapiController implements IAddressesController {
   })
   public async deleteAddress(request: Request, toolkit: ResponseToolkit) {
     try {
-      const result = await this.addressService.delete(request.params.addressId);
+      const result = await this.addressService.delete(request.params.addressId)
       if (!result.affected) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      return toolkit.response().code(204);
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
-
 }
 
 export { AddressController }

@@ -1,29 +1,29 @@
-import { Request, ResponseToolkit } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
-import * as Boom from '@hapi/boom';
-import { inject, injectable } from 'inversify';
-import { Logger } from 'winston';
-import { TYPES } from '../ioc/types';
-import { HapiRoute } from '../decorators/decorators';
-import { HapiController } from './hapi-controller';
+import { Request, ResponseToolkit } from '@hapi/hapi'
+import * as Joi from '@hapi/joi'
+import * as Boom from '@hapi/boom'
+import { inject, injectable } from 'inversify'
+import { Logger } from 'winston'
+import { TYPES } from '../ioc/types'
+import { HapiRoute } from '../decorators/decorators'
+import { HapiController } from './hapi-controller'
 
-import { ICarsController } from './interfaces/cars.interface';
-import { CarService } from '../service/car';
-import { CarDTO } from '../dto/car';
-import { Car } from '../entity/Car';
-import { CarMapper } from '../helpers/mapper/car';
-import { RaceResultService } from '../service/race-result';
+import { ICarsController } from './interfaces/cars.interface'
+import { CarService } from '../service/car'
+import { CarDTO } from '../dto/car'
+import { Car } from '../entity/Car'
+import { Mapper } from '../helpers/mapper'
+import { RaceResultService } from '../service/race-result'
 
 @injectable()
 class CarController extends HapiController implements ICarsController {
 
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
-    @inject(TYPES.CarMapper) private carMapper: CarMapper,
+    @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.CarService) private carService: CarService,
     @inject(TYPES.RaceResultService) private raceResultService: RaceResultService) {
-    super();
-    this.logger.info('Created controller CarController');
+    super()
+    this.logger.info('Created controller CarController')
   }
 
   /**
@@ -45,8 +45,8 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async getCars(request: Request, toolkit: ResponseToolkit) {
-    const data = await this.carService.findAllByQuery(request.query);
-    return toolkit.response(data);
+    const data = await this.carService.findAllByQuery(request.query)
+    return toolkit.response(data)
   }
 
   /**
@@ -74,16 +74,16 @@ class CarController extends HapiController implements ICarsController {
   })
   public async updateCar(request: Request, toolkit: ResponseToolkit) {
     try {
-      const item = await this.carService.findById(request.params.carId);
+      const item = await this.carService.findById(request.params.carId)
       if (!item) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
-      payload.id = request.params.carId;
-      await this.carService.save(payload);
-      return toolkit.response().code(204);
+      const payload: Car = this.mapper.map(CarDTO, Car, request.payload)
+      payload.id = request.params.carId
+      await this.carService.save(payload)
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -109,11 +109,11 @@ class CarController extends HapiController implements ICarsController {
   })
   public async addCar(request: Request, toolkit: ResponseToolkit) {
     try {
-      const payload: Car = this.carMapper.map(CarDTO, Car, request.payload);
-      const car: Car|undefined = await this.carService.save(payload);
-      return toolkit.response(car?.id).code(201);
+      const payload: Car = this.mapper.map(CarDTO, Car, request.payload)
+      const car: Car | undefined = await this.carService.save(payload)
+      return toolkit.response(car?.id).code(201)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -135,11 +135,11 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async getCarById(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.carService.findById(request.params.carId);
+    const item = await this.carService.findById(request.params.carId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
-    return toolkit.response(item);
+    return toolkit.response(item)
   }
 
   /**
@@ -161,13 +161,13 @@ class CarController extends HapiController implements ICarsController {
   })
   public async deleteCar(request: Request, toolkit: ResponseToolkit) {
     try {
-      const result = await this.carService.delete(request.params.carId);
+      const result = await this.carService.delete(request.params.carId)
       if (!result.affected) {
-        throw Boom.notFound();
+        throw Boom.notFound()
       }
-      return toolkit.response().code(204);
+      return toolkit.response().code(204)
     } catch (error) {
-      throw Boom.badRequest(error as any);
+      throw Boom.badRequest(error as any)
     }
   }
 
@@ -189,12 +189,12 @@ class CarController extends HapiController implements ICarsController {
     }
   })
   public async getRaceResultsByCarId(request: Request, toolkit: ResponseToolkit) {
-    const item = await this.carService.findById(request.params.carId);
+    const item = await this.carService.findById(request.params.carId)
     if (!item) {
-      throw Boom.notFound();
+      throw Boom.notFound()
     }
     const data = await this.raceResultService.findByQuery({ car: request.params.carId })
-    return toolkit.response(data);
+    return toolkit.response(data)
   }
 }
 

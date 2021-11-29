@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
-import { Address } from './Address';
-import { Car } from './Car';
-import { Driver } from './Driver';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany, JoinTable, ManyToMany, ManyToOne } from 'typeorm'
+import { Address } from './Address'
+import { Car } from './Car'
+import { Driver } from './Driver'
 
 export enum NationalityType {
   usa = 'USA',
@@ -11,26 +11,26 @@ export enum NationalityType {
 @Entity()
 class Team {
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+    id?: string
 
   @Column('varchar', { length: 100 })
-  name?: string;
+    name?: string
 
   @Column({
     type: 'enum',
     enum: NationalityType
   })
-  nationality?: NationalityType;    
+    nationality?: NationalityType    
 
   @ManyToOne(() => Address, address => address.id, { onDelete: 'SET NULL' })
-  businessAddress?: Address;
+    businessAddress?: Address
 
   @ManyToMany(() => Driver, driver => driver.teams, { cascade: true })
   @JoinTable()
-  drivers?: Driver[];
+    drivers?: Driver[]
 
   @OneToMany(() => Car, car => car.team)
-  cars?: Car[]
+    cars?: Car[]
 }
 
 export { Team }
