@@ -32,7 +32,12 @@ paths:
       summary: Add a new class to the system
       operationId: addClass
       requestBody:
-        $ref: '#/components/requestBodies/Class'
+        # $ref: '#/components/requestBodies/Class'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassRequestBody'
+        required: true
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -75,7 +80,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/Class'
+        # $ref: '#/components/requestBodies/Class'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClassRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -125,7 +135,12 @@ paths:
       summary: Add a new address to the system
       operationId: addAddress
       requestBody:
-        $ref: '#/components/requestBodies/Address'
+        # $ref: '#/components/requestBodies/Address'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressRequestBody'
+        required: true
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -168,7 +183,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/Address'
+        # $ref: '#/components/requestBodies/Address'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -218,7 +238,12 @@ paths:
       summary: Add a new driver to the system
       operationId: addDriver
       requestBody:
-        $ref: '#/components/requestBodies/Driver'
+        # $ref: '#/components/requestBodies/Driver'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverRequestBody'
+        required: true
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -261,7 +286,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/Driver'
+        # $ref: '#/components/requestBodies/Driver'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -337,7 +367,12 @@ paths:
       summary: Add a new team to the system
       operationId: addTeam
       requestBody:
-        $ref: '#/components/requestBodies/Team'
+        # $ref: '#/components/requestBodies/Team'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamRequestBody'
+        required: true
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -380,7 +415,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/Team'
+        # $ref: '#/components/requestBodies/Team'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -445,7 +485,12 @@ paths:
       summary: Add a new car to the system
       operationId: addCar
       requestBody:
-        $ref: '#/components/requestBodies/Car'
+        # $ref: '#/components/requestBodies/Car'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequestBody'
+        required: true
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -488,7 +533,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/Car'
+        # $ref: '#/components/requestBodies/Car'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -564,7 +614,19 @@ paths:
       summary: Add a new race to the system
       operationId: addRace
       requestBody:
-        $ref: '#/components/requestBodies/CreateRace'
+        # $ref: '#/components/requestBodies/CreateRace'
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/RaceRequestBody'
+                - type: object
+                  properties:
+                    raceResults:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/RaceResultRequestBody'
+        required: true
       responses:
         '201':
           $ref: '#/components/responses/201Created'
@@ -607,7 +669,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/UpdateRace'
+        # $ref: '#/components/requestBodies/UpdateRace'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RaceRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -673,7 +740,19 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/AddRaceResult'
+        # $ref: '#/components/requestBodies/AddRaceResult'
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                raceResults:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/RaceResultRequestBody'
+              required:
+                - raceResult
+        required: true
       responses:
         '201':
           description: Created. Successful operation
@@ -695,7 +774,12 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       requestBody:
-        $ref: '#/components/requestBodies/RaceResult'
+        # $ref: '#/components/requestBodies/RaceResult'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RaceResultRequestBody'
+        required: true
       responses:
         '204':
           $ref: '#/components/responses/204NoContent'
@@ -1015,75 +1099,75 @@ components:
           minimum: 1
           type: integer
           example: 3
-  requestBodies:
-    Class:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ClassRequestBody'
-      required: true
-    Address:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AddressRequestBody'
-      required: true
-    Driver:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DriverRequestBody'
-      required: true
-    Team:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TeamRequestBody'
-      required: true
-    Car:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CarRequestBody'
-      required: true
-    CreateRace:
-      content:
-        application/json:
-          schema:
-            allOf:
-              - $ref: '#/components/schemas/RaceRequestBody'
-              - type: object
-                properties:
-                  raceResults:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/RaceResultRequestBody'
-      required: true
-    UpdateRace:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RaceRequestBody'
-      required: true
-    AddRaceResult:
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              raceResults:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RaceResultRequestBody'
-            required:
-              - raceResult
-      required: true
-    RaceResult:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RaceResultRequestBody'
-      required: true
+  # requestBodies:
+  #   Class:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/ClassRequestBody'
+  #     required: true
+  #   Address:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/AddressRequestBody'
+  #     required: true
+  #   Driver:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/DriverRequestBody'
+  #     required: true
+  #   Team:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/TeamRequestBody'
+  #     required: true
+  #   Car:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/CarRequestBody'
+  #     required: true
+  #   CreateRace:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           allOf:
+  #             - $ref: '#/components/schemas/RaceRequestBody'
+  #             - type: object
+  #               properties:
+  #                 raceResults:
+  #                   type: array
+  #                   items:
+  #                     $ref: '#/components/schemas/RaceResultRequestBody'
+  #     required: true
+  #   UpdateRace:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/RaceRequestBody'
+  #     required: true
+  #   AddRaceResult:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           type: object
+  #           properties:
+  #             raceResults:
+  #               type: array
+  #               items:
+  #                 $ref: '#/components/schemas/RaceResultRequestBody'
+  #           required:
+  #             - raceResult
+  #     required: true
+  #   RaceResult:
+  #     content:
+  #       application/json:
+  #         schema:
+  #           $ref: '#/components/schemas/RaceResultRequestBody'
+  #     required: true
   responses:
     201Created:
       description: Created. Successful operation

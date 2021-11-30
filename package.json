@@ -12,7 +12,9 @@
     "copy-files": "copyfiles -u 1 ./src/**/*.yaml ./dist/",
     "start": "npm run build && node dist/index.js",
     "nodemon:build": "npm run copy-files && nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage"
   },
   "author": "Craig Drabik",
   "license": "MIT",
