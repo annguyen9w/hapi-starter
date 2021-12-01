@@ -54,7 +54,7 @@ class ClassController extends HapiController implements IClassesController {
           classId: Joi.string().length(36).required()
         },
         payload: {
-          name: Joi.string().required()
+          name: Joi.string().max(100).required()
         }
       },
       description: 'Update an existing class',
@@ -82,7 +82,7 @@ class ClassController extends HapiController implements IClassesController {
     options: {
       validate: {
         payload: {
-          name: Joi.string().required()
+          name: Joi.string().max(100).required()
         }
       },
       description: 'Add a new class to the system',
@@ -91,9 +91,13 @@ class ClassController extends HapiController implements IClassesController {
     }
   })
   public async addClass(request: Request, toolkit: ResponseToolkit) {
-    const payload: Class = this.mapper.map(ClassDTO, Class, request.payload)
-    const item: Class | undefined = await this.classService.save(payload)
-    return toolkit.response(item?.id).code(201)
+    try{
+      const payload: Class = this.mapper.map(ClassDTO, Class, request.payload)
+      const item: Class | undefined = await this.classService.save(payload)
+      return toolkit.response(item?.id).code(201)
+    } catch (error: any) {
+      throw Boom.badRequest(error)
+    }
   }
 
   /**
