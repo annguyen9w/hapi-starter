@@ -159,12 +159,17 @@ class DriverController extends HapiController implements IDriversController {
   public async deleteDriver(request: Request, toolkit: ResponseToolkit) {
     try {
       const result = await this.driverService.delete(request.params.driverId)
-      if (!result.affected) {
-        throw Boom.notFound()
-      }
+      // if (!result.affected) {
+      //   throw Boom.notFound()
+      // }
       return toolkit.response().code(204)
-    } catch (error) {
-      throw Boom.badRequest(error as any)
+    } catch (error: any) {
+      const respCode = error.output.statusCode || 500
+      if (respCode === 404) {
+        throw Boom.notFound()
+      } else {
+        throw Boom.badRequest(error)
+      }
     }
   }
 
