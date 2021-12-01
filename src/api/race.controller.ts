@@ -238,14 +238,18 @@ class RaceController extends HapiController implements IRacesController {
         throw Boom.notFound()
       }
       const payload: Race = this.mapper.map(RaceDTO, Race, request.payload)
+      const raceResultIds:string[] = []
       if (payload.raceResults) {
         for (const raceResult of payload.raceResults) {
           const raceResultMapper = this.mapper.map(RaceResultDTO, RaceResult, raceResult)
           raceResultMapper.race = request.params.raceId
-          await this.raceResultService.save(raceResultMapper)
+          const raceResultRepo = await this.raceResultService.save(raceResultMapper)
+          if (raceResultRepo && raceResultRepo.id) {
+            raceResultIds.push(raceResultRepo.id)
+          }
         }
       }
-      return toolkit.response().code(201)
+      return toolkit.response(raceResultIds).code(201)
     } catch (error) {
       throw Boom.badRequest(error as any)
     }
