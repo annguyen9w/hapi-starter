@@ -162,17 +162,12 @@ class CarController extends HapiController implements ICarsController {
   public async deleteCar(request: Request, toolkit: ResponseToolkit) {
     try {
       const result = await this.carService.delete(request.params.carId)
-      // if (!result.affected) {
-      //   throw Boom.notFound()
-      // }
+      if (!result.affected) {
+        return Boom.notFound()
+      }
       return toolkit.response().code(204)
     } catch (error: any) {
-      const respCode = error.output.statusCode || 500
-      if (respCode === 404) {
-        throw Boom.notFound()
-      } else {
-        throw Boom.badRequest(error)
-      }
+      throw Boom.badRequest(error)
     }
   }
 

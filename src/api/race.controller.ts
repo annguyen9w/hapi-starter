@@ -169,17 +169,12 @@ class RaceController extends HapiController implements IRacesController {
   public async deleteRace(request: Request, toolkit: ResponseToolkit) {
     try {
       const result = await this.raceService.delete(request.params.raceId)
-      // if (!result.affected) {
-      //   throw Boom.notFound()
-      // }
+      if (!result.affected) {
+        return Boom.notFound()
+      }
       return toolkit.response().code(204)
     } catch (error: any) {
-      const respCode = error.output.statusCode || 500
-      if (respCode === 404) {
-        throw Boom.notFound()
-      } else {
-        throw Boom.badRequest(error)
-      }
+      throw Boom.badRequest(error)
     }
   }
 

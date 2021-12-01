@@ -152,17 +152,12 @@ class AddressController extends HapiController implements IAddressesController {
   public async deleteAddress(request: Request, toolkit: ResponseToolkit) {
     try {
       const result = await this.addressService.delete(request.params.addressId)
-      // if (!result.affected) {
-      //   throw Boom.notFound()
-      // }
+      if (!result.affected) {
+        return Boom.notFound()
+      }
       return toolkit.response().code(204)
     } catch (error: any) {
-      const respCode = error.output.statusCode || 500
-      if (respCode === 404) {
-        throw Boom.notFound()
-      } else {
-        throw Boom.badRequest(error)
-      }
+      throw Boom.badRequest(error)
     }
   }
 }

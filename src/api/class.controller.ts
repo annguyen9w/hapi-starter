@@ -141,17 +141,12 @@ class ClassController extends HapiController implements IClassesController {
   public async deleteClass(request: Request, toolkit: ResponseToolkit) {
     try {
       const result = await this.classService.delete(request.params.classId)
-      // if (!result.affected) {
-      //   throw Boom.notFound()
-      // }
+      if (!result.affected) {
+        return Boom.notFound()
+      }
       return toolkit.response().code(204)
     } catch (error: any) {
-      const respCode = error.output.statusCode || 500
-      if (respCode === 404) {
-        throw Boom.notFound()
-      } else {
-        throw Boom.badRequest(error)
-      }
+      throw Boom.badRequest(error)
     }
   }
 
