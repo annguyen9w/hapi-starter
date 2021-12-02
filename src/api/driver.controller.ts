@@ -72,7 +72,7 @@ class DriverController extends HapiController implements IDriversController {
     try {
       const item = await this.driverService.findById(request.params.driverId)
       if (!item) {
-        throw Boom.notFound()
+        return Boom.notFound()
       }
       const payload: Driver = this.mapper.map(DriverDTO, Driver, request.payload)
       payload.id = request.params.driverId
@@ -134,7 +134,7 @@ class DriverController extends HapiController implements IDriversController {
   public async getDriverById(request: Request, toolkit: ResponseToolkit) {
     const item = await this.driverService.findById(request.params.driverId)
     if (!item) {
-      throw Boom.notFound()
+      return Boom.notFound()
     }
     return toolkit.response(item)
   }
