@@ -16,12 +16,12 @@ import { DriverService } from '../service/driver'
 
 @injectable()
 class TeamController extends HapiController implements ITeamsController {
-
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
     @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.TeamService) private teamService: TeamService,
-    @inject(TYPES.DriverService) private driverService: DriverService) {
+    @inject(TYPES.DriverService) private driverService: DriverService
+  ) {
     super()
     this.logger.info('Created controller TeamController')
   }
@@ -71,7 +71,7 @@ class TeamController extends HapiController implements ITeamsController {
     try {
       const item = await this.teamService.findById(request.params.teamId)
       if (!item) {
-        throw Boom.notFound()
+        return Boom.notFound()
       }
       const payload: Team = this.mapper.map(TeamDTO, Team, request.payload)
       payload.id = request.params.teamId
@@ -140,7 +140,7 @@ class TeamController extends HapiController implements ITeamsController {
   public async getTeamById(request: Request, toolkit: ResponseToolkit) {
     const item = await this.teamService.findById(request.params.teamId)
     if (!item) {
-      throw Boom.notFound()
+      return Boom.notFound()
     }
     return toolkit.response(item)
   }
@@ -173,7 +173,6 @@ class TeamController extends HapiController implements ITeamsController {
       throw Boom.badRequest(error)
     }
   }
-
 }
 
 export { TeamController }
