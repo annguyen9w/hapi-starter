@@ -19,12 +19,12 @@ import { RaceResult } from '../entity/RaceResult'
 
 @injectable()
 class RaceController extends HapiController implements IRacesController {
-
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
     @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.RaceService) private raceService: RaceService,
-    @inject(TYPES.RaceResultService) private raceResultService: RaceResultService) {
+    @inject(TYPES.RaceResultService) private raceResultService: RaceResultService
+  ) {
     super()
     this.logger.info('Created controller RaceController')
   }
@@ -254,7 +254,6 @@ class RaceController extends HapiController implements IRacesController {
       throw Boom.badRequest(error as any)
     }
   }
-
 }
 
 export { RaceController }

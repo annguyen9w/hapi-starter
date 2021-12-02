@@ -4,24 +4,21 @@ module.exports = {
     es2021: true,
   },
   extends: [
+    'airbnb-base',
     'airbnb-typescript/base',
-    'plugin:@typescript-eslint/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
-    tsconfigRootDir: __dirname,
-    ecmaVersion: 13,
-    sourceType: 'module',
+    project: './tsconfig.json',
   },
   plugins: [
     '@typescript-eslint',
   ],
   rules: {
-    "@typescript-eslint/comma-dangle": ["error", "never"],
-    "@typescript-eslint/semi": ["error", "never"],
-    "import/extensions": "off",
-    "import/no-extraneous-dependencies": "off",
-    "@typescript-eslint/no-explicit-any": "off"
+    '@typescript-eslint/comma-dangle': ['error', 'never'],
+    '@typescript-eslint/semi': ['error', 'never'],
+    'import/prefer-default-export': 'off',
+    'no-restricted-syntax': 'off',
+    'linebreak-style': 'off',
   },
 };

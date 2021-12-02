@@ -16,12 +16,12 @@ import { RaceResultService } from '../service/race-result'
 
 @injectable()
 class DriverController extends HapiController implements IDriversController {
-
   constructor(
     @inject(TYPES.Logger) private logger: Logger,
     @inject(TYPES.Mapper) private mapper: Mapper,
     @inject(TYPES.DriverService) private driverService: DriverService,
-    @inject(TYPES.RaceResultService) private raceResultService: RaceResultService) {
+    @inject(TYPES.RaceResultService) private raceResultService: RaceResultService
+  ) {
     super()
     this.logger.info('Created controller DriverController')
   }
