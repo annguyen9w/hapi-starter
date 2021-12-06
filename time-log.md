@@ -33,3 +33,12 @@
 - 11/29/2021
     + setup eslint: 3h
     + jest unit test mock function: 4h
+- 11/30/2021
+    + implement jest unit test: 6h
+    + postman testing: 1h
+- 01/12/2021
+    + postman testing: 7h
+- 02/12/2021
+    + postman testing: 7h
+- 03/12/2021
+    + postman testing: 7h
